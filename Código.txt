@@ -37,10 +37,6 @@ String topico_2 = topicoPrefixo + "/atuador1"; //topico para o atuador 1
 String mensagem_2 = ""; //mensagem para o topico 2
 String mensagemTemp = ""; //armazena temporariamente as mensagens recebidas via MQTT
 
-int estadoBotao = 0; //variavel que le o estado atual do botao conectado em D0
-int ultimoEstadoBotao = 0; //variavel que guarda o ultimo estado do botao conectado em D0
-int controlaEstadoBotao = 0; //variavel que controla o estado do botao conectado em D0
-
 // ==============================
 // Funcoes definidas pelo usuario
 // ==============================
@@ -126,9 +122,6 @@ float Temperatura;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(D0, INPUT); //pino zero, onde esta ligado o pushbutton
-  pinMode(D1, OUTPUT); //pino 1, onde esta ligado o LED
-    
   pinMode(D5,OUTPUT);
   pinMode(D6,OUTPUT);
   pinMode(D7,OUTPUT);
@@ -155,7 +148,7 @@ void loop() {
   
   Temperatura = dht.readTemperature();
     if (isnan(Temperatura))
-      Serial.println("- Falha ao ler a temperatura medida pelo sensor DHT22");
+      Serial.println("- Falha ao ler a temperatura medida pelo sensor DHT11");
   else
   {
       Serial.print("Temperatura: ");
@@ -179,15 +172,17 @@ void loop() {
 
   //LED utilizados para medir metas antes do aviso ser ativado
   //pouca diferença nas temperaturas para facilitar video teste.
-  if(Temperatura >= 21)
+  if(Temperatura >= 19.3)
     digitalWrite(D5,HIGH);
   else digitalWrite(D5,LOW);
-  if(Temperatura > 21.3)
+  if(Temperatura > 19.8)
     digitalWrite(D6,HIGH);
   else digitalWrite(D6,LOW);
-  if(Temperatura > 21.7)
+  if(Temperatura > 20){
     digitalWrite(D7,HIGH);
-    Serial.println("Temperatura passou do limite, use medidas de resfriamento")
+    Serial.println("Temperatura passou do limite, use medidas de resfriamento");
+  }
   else digitalWrite(D7,LOW);
   //Delay antes de refazer a medição do sensor
   delay(5000);
+}
